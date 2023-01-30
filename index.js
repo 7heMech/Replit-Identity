@@ -18,7 +18,7 @@ const { execSync } = require("child_process");
  * @throws {Error} - When the command execution fails.
  */
 const identity = async (cmd, args) => {
-	let res = (await execSync("$REPLIT_CLI identity " + cmd + Object.keys(args).reduce((str, arg) => `${str} -${arg}="${args[arg]}"`, ""))).toString();
+	let res = (await execSync("$REPLIT_CLI identity " + cmd + Object.keys(args).reduce((str, arg) => `${str} -${arg}="${args[arg]}"`, ""))).toString().trim();
 	if (args.json) res = JSON.parse(res);
 	return res;
 };
