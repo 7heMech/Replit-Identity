@@ -10,10 +10,10 @@ npm install replit-identity
 const replitIdentity = require('replit-identity');
 
 // Create a token
-const token = replitIdentity('create', { audience: 'target repl id' });
+const token = await replitIdentity('create', { audience: 'target repl id' });
 
 // Verify a token
-const info = replitIdentity('verify', { audience: 'target repl id', token, json: true });
+const info = await replitIdentity('verify', { audience: 'target repl id', token, json: true });
 console.log(info);
 ```
 **Note**: This package uses the $REPLIT_CLI identity command to run the commands, so it can only be used in a Replit environment.
