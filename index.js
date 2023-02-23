@@ -14,12 +14,16 @@ const { execSync } = require("child_process");
  *  - token: the token to verify.
  *  - json: if set to true, the command's output will be parsed as JSON.
  * 
- * @returns {(string|object)} - The output of the command. If the json option is set to true, the output will be parsed as JSON.
- * @throws {Error} - When the command execution fails.
+ * @returns {(string|object|null)} - The output of the command. If the json option is set to true, the output will be parsed as JSON. Null if there was identity mismatch.
  */
 const identity = async (cmd, args) => {
-	let res = (await execSync("$REPLIT_CLI identity " + cmd + Object.keys(args).reduce((str, arg) => `${str} -${arg}="${args[arg]}"`, ""))).toString().trim();
-	if (args.json) res = JSON.parse(res);
+	let res;
+	try {
+		res = (await execSync("$REPLIT_CLI identity " + cmd + Object.keys(args).reduce((str, arg) => `${str} -${arg}="${args[arg]}"`, ""))).toString().trim();
+		if (args.json) res = JSON.parse(res);
+	} catch (error) {
+		res = null;
+	}
 	return res;
 };
 
