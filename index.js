@@ -1,30 +1,60 @@
 const { execSync } = require("child_process");
 
 /**
+ * @typedef {Object} info
+ * @property {string} replid - Id of Repl where token was created.
+ * @property {string} slug - Slug of the Repl where token was created.
+ * @property {string} user - Username of User who created token.
+ * @property {number} user_id - Id of user who created token.
+ * @property {string} aud - Target Repl's ID.
+ */
+
+/**
  * Executes Replit CLI's identity command with specified command and arguments.
  * @function
- * @async
- * @param {string} cmd - The command to execute. Possible values: "create", "verify".
- * @param {object} args - An object containing the options for the command.
- * Possible options for the "create" command:
- *  - audience: the target Repl's ID.
- *  - json: if set to true, the command's output will be parsed as JSON.
- * Possible options for the "verify" command:
- *  - audience: the target Repl's ID.
- *  - token: the token to verify.
- *  - json: if set to true, the command's output will be parsed as JSON.
- * 
- * @returns {(string|object|null)} - The output of the command. If the json option is set to true, the output will be parsed as JSON. Null if there was identity mismatch.
+ * @param {'create'|'verify'} cmd - The command to execute.
+ * @param {Object} [flags] - An object containing the options for the command.
+ * @param {string} flags.audience - The target Repl's ID.
+ * @param {string} flags.token - The token to verify (Used with verify command)
+ * @param {string} flags.json - Returns object.
+ * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
-const identity = async (cmd, args) => {
+const identity = (cmd, flags) => {
+	const args = Object.keys(flags).reduce((str, flag) => {
+		const value = flags[flag].replaceAll('"', '\\"');
+		return `${str} -${flag}="${value}"`;
+	}, '');
+
+	const command = '$REPLIT_CLI identity ' + cmd + args;
+
 	let res;
 	try {
-		res = (await execSync("$REPLIT_CLI identity " + cmd + Object.keys(args).reduce((str, arg) => `${str} -${arg}="${args[arg]}"`, ""))).toString().trim();
-		if (args.json) res = JSON.parse(res);
-	} catch (error) {
+		res = execSync(command).toString().trimEnd();
+		if (flags.json) res = JSON.parse(res);
+	} catch (err) {
 		res = null;
 	}
 	return res;
 };
 
-module.exports = identity;
+/**
+ * Creates a new identity token.
+ * @function
+ * @param {string} audience - The target Repl's ID.
+ * @returns {string} - The created token.
+ */
+const create = (audience) => identity('create', { audience });
+
+/**
+ * Verifies an existing identity token against an audience.
+ * @function
+ * @param {string} audience - The target Repl's ID.
+ * @param {string} token - The identity token to verify.
+ * @returns {info|null} - Returns null if there was token - audience identity mismatch.
+ */
+const verify = (audience, token) => identity('verify', { audience, token, json: 'true' });
+
+module.exports = {
+	create,
+	verify
+};

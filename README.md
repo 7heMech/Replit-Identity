@@ -1,37 +1,44 @@
-A simple package to interact with the Replit CLI's `identity` command.
-
-Replit Identity is a signed identity for every Repl that your code can use to authenticate other Repls when communicating with your APIs and services.
+Replit Identity is a signed identity token for every Repl that your code can use to authenticate other Repls when communicating with your APIs and services.
 ## Installation
 ```
 npm install replit-identity
 ```
-## Examples
+## Usage
 ```js
-const replitIdentity = require('replit-identity');
+const { create, verify } = require('replit-identity');
+
+const audience = process.env.REPL_ID; // target repl id
 
 // Create a token
-const token = await replitIdentity('create', { audience: 'target repl id' });
+const token = create(audience);
 
 // Verify a token
-const info = await replitIdentity('verify', { audience: 'target repl id', token, json: true });
+const info = verify(audience, token);
 console.log(info);
 ```
-**Note**: This package uses the $REPLIT_CLI identity command to run the commands, so it can only be used in a Replit environment.
-## Commands
-
+This package can only be used in a Replit environment.
+## API
+Replit Identity exports an object with the following functions:
 #### create
-Create a new token with the given options.
+Creates a new identity token.
 
-* `audience` (required): The audience of the token.
-* `json` (optional): Output in JSON format.
+* `audience` (string): The audience of the token.
+
+Returns a string token.
   
 #### verify
-Verify an existing token with the given options.
+Verifies an existing identity token.
 
-* `audience` (required): The audience of the token.
-* `token` (required): The token to verify.
-* `json` (optional): Output in JSON format.
-  
-### Return Value
-* `create` returns the token if json flag is not provided, returns json object containing token if json flag is provided.
-* `verify` returns json object containing replid, user, slug, aud if json flag is provided, returns plain text otherwise.
+* `audience` (string): The audience to verify against.
+* `token` (string): The token to verify.
+
+Returns an object of this format:
+```json
+{
+	"replid": "Id of Repl where token was created.",
+	"slug": "Slug of the Repl where token was created.",
+	"user": "Username of User who created token.",
+	"user_id": 123456,
+	"aud": "Target Repl's ID."
+}
+```
