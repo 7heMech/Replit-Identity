@@ -35,10 +35,10 @@ Verifies an existing identity token.
 Returns an object of this format:
 ```json
 {
-	"replid": "The id of the repl where the token was created.",
+	"replId": "The id of the repl where the token was created.",
+	"userId": 123456,
 	"slug": "The slug of the repl where the token was created.",
 	"user": "The name of the user who created the token.",
-	"user_id": 123456,
 	"aud": "The target repl's id."
 }
 ```

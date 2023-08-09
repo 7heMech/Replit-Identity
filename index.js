@@ -2,10 +2,10 @@ const { execSync } = require("child_process");
 
 /**
  * @typedef {Object} info
- * @property {string} replid - The id of the repl where the token was created.
+ * @property {string} replId - The id of the repl where the token was created.
+ * @property {number} userId - Id of the user who created the token.
  * @property {string} slug - The slug of the repl where the token was created.
  * @property {string} user - The name of the user who created the token.
- * @property {number} user_id - Id of the user who created the token.
  * @property {string} aud - The target repl's id.
  */
 
@@ -52,7 +52,14 @@ const create = (audience) => identity('create', { audience });
  * @param {string} token - The identity token to verify.
  * @returns {info|null} - Returns null if there was token - audience identity mismatch.
  */
-const verify = (audience, token) => identity('verify', { audience, token, json: 'true' });
+const verify = (audience, token) => {
+	const data = identity('verify', { audience, token, json: 'true' });
+	data.replId = data.replid;
+	data.userId = data.user_id;
+	delete data.replid;
+	delete data.user_id;
+	return data;
+}
 
 module.exports = {
 	create,
