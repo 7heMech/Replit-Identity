@@ -6,7 +6,7 @@ const { execSync } = require("child_process");
  * @property {string} slug - The slug of the Repl where the token was created.
  * @property {string} user - The name of the User who created the token.
  * @property {number} user_id - Id of user who created token.
- * @property {string} aud - The target Repl's id..
+ * @property {string} aud - The target Repl's id.
  */
 
 /**
