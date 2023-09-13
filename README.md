@@ -39,6 +39,6 @@ Returns an object of this format:
 	"userId": 123456,
 	"slug": "The slug of the repl where the token was created.",
 	"user": "The name of the user who created the token.",
-	"aud": "The target repl's id."
+	"aud": "The audience for which the token was created."
 }
 ```
