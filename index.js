@@ -67,7 +67,7 @@ function camelize(o) {
   const obj = {};
   for (let [key, val] of Object.entries(o)) {
 		if (key === 'replid') {
-			obj.replId = value;
+			obj.replId = val;
 			continue;
 		}
 		
