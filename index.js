@@ -60,10 +60,8 @@ const verify = (token, audience) => camelize(identity('verify', { audience, toke
 
 module.exports = { create, verify };
 
-const isObject = (o) => typeof o === 'object' && o !== null;
-
 function camelize(o) {
-  if (!isObject(o)) return o;
+  if (typeof o !== 'object' || o === null) return o;
   const obj = {};
   for (let [key, val] of Object.entries(o)) {
     if (key === 'replid') {
@@ -74,7 +72,7 @@ function camelize(o) {
     key = key.replace(/[\-_\s]+(.)?/g, (_, ch) => ch ? ch.toUpperCase() : '');
     key = key.substring(0, 1).toLowerCase() + key.substring(1);
 
-    obj[key] = isObject(val) ? camelize(val) : val;
+    obj[key] = camelize(val);
   }
   return obj;
 }
