@@ -75,7 +75,6 @@ function camelize(o) {
 			continue;
 		}
 
-		// camelize
   	let newKey = key.replace(/[\-_\s]+(.)?/g, (_, chr) => chr ? chr.toUpperCase() : '');
   	newKey = newKey.substring(0, 1).toLowerCase() + newKey.substring(1);
 		
