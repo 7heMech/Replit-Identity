@@ -28,17 +28,17 @@ const { execSync } = require("child_process");
  * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
 const identity = (cmd, flags) => {
-	const args = Object.keys(flags).reduce((str, flag) => `${str} -${flag}="${flags[flag].replaceAll('"', '\\"')}"`,'');
-	const command = '$REPLIT_CLI identity ' + cmd + args;
+  const args = Object.keys(flags).reduce((str, flag) => `${str} -${flag}="${flags[flag].replaceAll('"', '\\"')}"`,'');
+  const command = '$REPLIT_CLI identity ' + cmd + args;
 
-	let res;
-	try {
-		res = execSync(command).toString().trimEnd();
-		if (flags.json) res = JSON.parse(res);
-	} catch (err) {
-		res = null;
-	}
-	return res;
+  let res;
+  try {
+    res = execSync(command).toString().trimEnd();
+    if (flags.json) res = JSON.parse(res);
+  } catch (err) {
+    res = null;
+  }
+  return res;
 };
 
 /**
@@ -58,19 +58,16 @@ const create = (audience) => identity('create', { audience });
  */
 const verify = (token, audience) => camelize(identity('verify', { audience, token, json: 'true' }));
 
-module.exports = {
-	create,
-	verify
-};
+module.exports = { create, verify };
 
 function camelize(o) {
   const obj = {};
   for (let [key, val] of Object.entries(o)) {
-		if (key === 'replid') {
-			obj.replId = val;
-			continue;
-		}
-		
+    if (key === 'replid') {
+      obj.replId = val;
+      continue;
+    }
+
     key = key.replace(/[\-_\s]+(.)?/g, (_, ch) => ch ? ch.toUpperCase() : '');
     key = key.substring(0, 1).toLowerCase() + key.substring(1);
 
