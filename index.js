@@ -13,7 +13,7 @@ const { execSync } = require("child_process");
  * @property {string} slug - The slug of the repl where the token was created.
  * @property {number} userId - Id of the user who created the token.
  * @property {string} replId - The id of the repl where the token was created.
- * @property {string} aud - The audience for which the token was created
+ * @property {string} aud - The audience for which the token was created.
  * @property {Runtime} runtime - The current runtime.
  */
 
@@ -23,7 +23,7 @@ const { execSync } = require("child_process");
  * @param {'create'|'verify'} cmd - The command to execute.
  * @param {Object} [flags] - An object containing the options for the command.
  * @param {string} flags.audience - The audience for which the token will be/was created.
- * @param {string} flags.token - The token to verify (Used with verify command)
+ * @param {string} flags.token - The token to verify. (Used with verify command)
  * @param {string} flags.json - Returns object.
  * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
