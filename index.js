@@ -77,7 +77,7 @@ function camelize(o) {
 
 		// camelize
   	let newKey = key.replace(/[\-_\s]+(.)?/g, (_, chr) => chr ? chr.toUpperCase() : '');
-  	newKey = newKey.substr(0, 1).toLowerCase() + newKey.substr(1);
+  	newKey = newKey.substring(0, 1).toLowerCase() + newKey.substring(1);
 		
 		obj[newKey] = typeof value === 'object' && value !== null ? camelize(value) : value;
 	}
