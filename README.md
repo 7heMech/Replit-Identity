@@ -10,7 +10,7 @@ const { create, verify } = require('replit-identity');
 const audience = 'target-repl-id';
 const token = create(audience);
 
-const info = verify(audience, token);
+const info = verify(token, audience);
 console.log(info);
 ```
 This package can only be used in a Replit environment.
