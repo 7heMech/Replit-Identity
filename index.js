@@ -1,11 +1,11 @@
 const { execSync } = require("child_process");
 
 /** 
-@typedef {Object} Runtime
-@property {Object} [interactive]
-@property {string} interactive.cluster
-@property {string} interactive.subcluster
-*/
+ * @typedef {Object} Runtime
+ * @property {Object} [interactive]
+ * @property {string} interactive.cluster
+ * @property {string} interactive.subcluster
+ */
 
 /**
  * @typedef {Object} Info
