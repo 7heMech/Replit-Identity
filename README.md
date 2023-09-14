@@ -7,12 +7,9 @@ npm install replit-identity
 ```js
 const { create, verify } = require('replit-identity');
 
-const audience = process.env.REPL_ID; // target repl id
-
-// Create a token
+const audience = 'target-repl-id';
 const token = create(audience);
 
-// Verify a token
 const info = verify(audience, token);
 console.log(info);
 ```
@@ -32,13 +29,4 @@ Verifies an existing identity token.
 * `audience` (string): The audience to verify against.
 * `token` (string): The token to verify.
 
-Returns an object of this format:
-```json
-{
-	"replId": "The id of the repl where the token was created.",
-	"userId": 123456,
-	"slug": "The slug of the repl where the token was created.",
-	"user": "The name of the user who created the token.",
-	"aud": "The audience for which the token was created."
-}
-```
+Returns an object with info about the token or null if invalid.
