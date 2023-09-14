@@ -28,11 +28,7 @@ const { execSync } = require("child_process");
  * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
 const identity = (cmd, flags) => {
-	const args = Object.keys(flags).reduce((str, flag) => {
-		const value = flags[flag].replaceAll('"', '\\"');
-		return `${str} -${flag}="${value}"`;
-	}, '');
-
+	const args = Object.keys(flags).reduce((str, flag) => `${str} -${flag}="${flags[flag].replaceAll('"', '\\"')}"`,'');
 	const command = '$REPLIT_CLI identity ' + cmd + args;
 
 	let res;
@@ -68,17 +64,17 @@ module.exports = {
 };
 
 function camelize(o) {
-	const obj = {};
-	for (const [key, value] of Object.entries(o)) {
+  const obj = {};
+  for (let [key, val] of Object.entries(o)) {
 		if (key === 'replid') {
 			obj.replId = value;
 			continue;
 		}
-
-  	let newKey = key.replace(/[\-_\s]+(.)?/g, (_, chr) => chr ? chr.toUpperCase() : '');
-  	newKey = newKey.substring(0, 1).toLowerCase() + newKey.substring(1);
 		
-		obj[newKey] = typeof value === 'object' && value !== null ? camelize(value) : value;
-	}
-	return obj;
+    key = key.replace(/[\-_\s]+(.)?/g, (_, ch) => ch ? ch.toUpperCase() : '');
+    key = key.substring(0, 1).toLowerCase() + key.substring(1);
+
+    obj[key] = typeof val === 'object' && val !== null ? camelize(val) : val;
+  }
+  return obj;
 }
