@@ -3,8 +3,15 @@ const { execSync } = require("child_process");
 /** 
  * @typedef {Object} Runtime
  * @property {Object} [interactive]
- * @property {string} interactive.cluster
- * @property {string} interactive.subcluster
+ * This is set if the Repl is running interactively and not when the Repl is running in hosting.
+ * @property {string} interactive.cluster - The cluster in which this Repl is running.
+ * @property {string} interactive.subcluster - The subcluster in which this Repl is running.
+ * @property {Object} [hosting]
+ * This is set if the Repl is running in a hosting subcluster.
+ * @property {string} hosting.cluster - The cluster in which this Repl is running.
+ * @property {string} hosting.subcluster - The subcluster in which this Repl is running.
+ * @property {Object} [deployment]
+ * This is set if the Repl is running in a Deployment.
  */
 
 /**
@@ -14,7 +21,7 @@ const { execSync } = require("child_process");
  * @property {number} userId - Id of the user who created the token.
  * @property {string} replId - The id of the repl where the token was created.
  * @property {string} aud - The audience for which the token was created.
- * @property {Runtime} runtime - The current runtime.
+ * @property {Runtime} runtime - Runtime information about the Repl.
  */
 
 /**
