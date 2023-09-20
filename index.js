@@ -63,12 +63,15 @@ const create = (audience) => identity('create', { audience });
  * @param {string} audience - The audience for which the token was created.
  * @returns {Info|null} - Returns null if there was token - audience identity mismatch.
  */
-const verify = (token, audience) => camelize(identity('verify', { audience, token, json: 'true' }));
+const verify = (token, audience) => camelize(
+  identity('verify', { audience, token, json: 'true' })
+);
 
 module.exports = { create, verify };
 
 function camelize(o) {
   if (typeof o !== 'object' || o === null) return o;
+
   const obj = {};
   for (let [key, val] of Object.entries(o)) {
     if (key === 'replid') {
@@ -76,7 +79,7 @@ function camelize(o) {
       continue;
     }
 
-    key = key.replace(/[\-_\s]+(.)?/g, (_, ch) => ch ? ch.toUpperCase() : '');
+    key = key.replace(/[\-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
     key = key.substring(0, 1).toLowerCase() + key.substring(1);
 
     obj[key] = camelize(val);
