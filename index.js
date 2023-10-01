@@ -18,8 +18,9 @@ const { execSync } = require("child_process");
  * @typedef {Object} Info
  * @property {string} user - The name of the user who created the token.
  * @property {string} slug - The slug of the repl where the token was created.
- * @property {number} userId - Id of the user who created the token.
+ * @property {number} userId - The id of the user who created the token.
  * @property {string} replId - The id of the repl where the token was created.
+ * @property {string} originReplId - The id of the original repl despite the running environment being a fork.
  * @property {string} aud - The audience for which the token was created.
  * @property {Runtime} runtime - Runtime information about the Repl.
  */
@@ -74,13 +75,8 @@ function camelize(o) {
 
   const obj = {};
   for (let [key, val] of Object.entries(o)) {
-    if (key === 'replid') {
-      obj.replId = val;
-      continue;
-    }
-
     key = key.replace(/[\-_\s]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
-    key = key.substring(0, 1).toLowerCase() + key.substring(1);
+    key = key.substring(0, 1).toLowerCase() + key.substring(1).replace('id', 'Id');
 
     obj[key] = camelize(val);
   }
