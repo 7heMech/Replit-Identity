@@ -20,7 +20,7 @@ const { execSync } = require("child_process");
  * @property {string} slug - The slug of the repl where the token was created.
  * @property {number} userId - The id of the user who created the token.
  * @property {string} replId - The id of the repl where the token was created.
- * @property {string} originReplId - The id of the original repl despite the running environment being a fork.
+ * @property {string} [originReplId] - The id of the original repl despite the running environment being a fork.
  * @property {string} aud - The audience for which the token was created.
  * @property {Runtime} runtime - Runtime information about the Repl.
  */
