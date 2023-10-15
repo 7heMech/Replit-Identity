@@ -22,7 +22,7 @@ const { execSync } = require("child_process");
  * @property {string} replId - The id of the repl where the token was created.
  * @property {string} [originReplId] - The id of the original repl despite the running environment being a fork.
  * @property {string} aud - The audience for which the token was created.
- * @property {Runtime} runtime - Runtime information about the Repl.
+ * @property {Runtime|null} runtime - Runtime information about the Repl.
  */
 
 /**
@@ -36,24 +36,31 @@ const { execSync } = require("child_process");
  * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
 const identity = (cmd, flags) => {
-  const args = Object.keys(flags).reduce((str, flag) => `${str} -${flag}="${flags[flag].replaceAll('"', '\\"')}"`,'');
-  const command = '$REPLIT_CLI identity ' + cmd + args;
+	let args = '', res;
 
-  let res;
-  try {
-    res = execSync(command).toString().trimEnd();
-    if (flags.json) res = JSON.parse(res);
-  } catch (err) {
-    res = null;
-  }
-  return res;
+	try {
+		const keys = Object.keys(flags);
+		for (let i = 0; i < keys.length; i++) {
+			const flag = keys[i];
+			args += ` -${flag}="${flags[flag].replaceAll('"', '\\"')}"`
+		}
+
+		const command = '$REPLIT_CLI identity ' + cmd + args;
+
+		res = execSync(command).toString().trimEnd();
+		if (flags.json) res = JSON.parse(res);
+	} catch (err) {
+		res = null;
+	}
+
+	return res;
 };
 
 /**
  * Creates a new identity token.
  * @function
  * @param {string} audience - The audience for which the token will be created.
- * @returns {string} - The created token.
+ * @returns {string|null} - The created token or null if there was an error creating the token.
  */
 const create = (audience) => identity('create', { audience });
 

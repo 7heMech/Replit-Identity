@@ -1,4 +1,7 @@
-Replit Identity is a signed identity token for every Repl that your code can use to authenticate other Repls when communicating with your APIs and services.
+###### Supports typescript.
+This package can create and verify replit identity tokens.
+
+An identity token is a signed token for every Repl that your code can use to authenticate other Repls when communicating with your APIs and services.
 ## Installation
 ```
 npm install replit-identity
@@ -21,7 +24,7 @@ Creates a new identity token.
 
 * `audience` (string): The audience of the token.
 
-Returns a string token.
+Returns a string token or null if error.
   
 #### verify
 Verifies an existing identity token.
