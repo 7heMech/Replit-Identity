@@ -1,4 +1,5 @@
 const { execSync } = require("child_process");
+const cache = new Map();
 
 /** 
  * @typedef {Object} Runtime
@@ -71,14 +72,25 @@ const create = (audience) => identity('create', { audience });
  * @param {string} audience - The audience for which the token was created.
  * @returns {Info|null} - Returns null if there was token - audience identity mismatch.
  */
-const verify = (token, audience) => camelize(identity('verify', { audience, token, json: 'true' }));
+const verify = (token, audience) => {
+	let info;
+	if (cache.has(token)) {
+		info = cache.get(token);
+		if (info.aud !== audience) return null;
+	} else {
+		info = camelize(identity('verify', { audience, token, json: 'true' }));
+		if (info !== null) cache.set(token, info);
+	}
+	return info;
+}
 
 module.exports = { create, verify };
 
 function camelize(obj) {
+	if (obj === null) return null;
 	replace(obj, { 
-		replid: 'replId',
 		user_id: 'userId',
+		replid: 'replId',
 		originReplid: 'originReplId',
 		Runtime: 'runtime'
 	});
