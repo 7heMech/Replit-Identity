@@ -79,8 +79,8 @@ function camelize(obj) {
 	replace(obj, { 
 		replid: 'replId',
 		user_id: 'userId',
-		Runtime: 'runtime',
-		originReplid: 'originReplId'
+		originReplid: 'originReplId',
+		Runtime: 'runtime'
 	});
 	replace(obj.runtime, {
 		Interactive: 'interactive',
