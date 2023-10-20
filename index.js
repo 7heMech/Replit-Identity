@@ -37,24 +37,24 @@ const cache = new Map();
  * @returns {object|string|null} - Returns null if there was token identity mismatch.
  */
 const identity = (cmd, flags) => {
-	let args = '', res;
+  let args = '', res;
 
-	try {
-		const keys = Object.keys(flags);
-		for (let i = 0; i < keys.length; i++) {
-			const flag = keys[i];
-			args += ` -${flag}="${flags[flag].replaceAll('"', '\\"')}"`
-		}
+  try {
+    const keys = Object.keys(flags);
+    for (let i = 0; i < keys.length; i++) {
+      const flag = keys[i];
+      args += ` -${flag}="${flags[flag].replaceAll('"', '\\"')}"`
+    }
 
-		const command = '$REPLIT_CLI identity ' + cmd + args;
+    const command = '$REPLIT_CLI identity ' + cmd + args;
 
-		res = execSync(command).toString().trimEnd();
-		if (flags.json) res = JSON.parse(res);
-	} catch (err) {
-		res = null;
-	}
+    res = execSync(command).toString().trimEnd();
+    if (flags.json) res = JSON.parse(res);
+  } catch (err) {
+    res = null;
+  }
 
-	return res;
+  return res;
 };
 
 /**
@@ -73,37 +73,39 @@ const create = (audience) => identity('create', { audience });
  * @returns {Info|null} - Returns null if there was token - audience identity mismatch.
  */
 const verify = (token, audience) => {
-	let info;
-	if (cache.has(token)) {
-		info = cache.get(token);
-		if (info.aud !== audience) return null;
-	} else {
-		info = camelize(identity('verify', { audience, token, json: 'true' }));
-		if (info !== null) cache.set(token, info);
-	}
-	return info;
+  let info;
+  if (cache.has(token)) {
+    info = cache.get(token);
+    if (info.aud !== audience) return null;
+  } else {
+    info = camelize(identity('verify', { audience, token, json: 'true' }));
+
+    if (info !== null) cache.set(token, info);
+  }
+  return info;
 }
 
 module.exports = { create, verify };
 
 function camelize(obj) {
-	if (obj === null) return null;
-	replace(obj, { 
-		user_id: 'userId',
-		replid: 'replId',
-		originReplid: 'originReplId',
-		Runtime: 'runtime'
-	});
-	replace(obj.runtime, {
-		Interactive: 'interactive',
-		Hosting: 'hosting',
-		Deployment: 'deployment',
-	});
-	return obj;
+  if (obj === null) return null;
+  replace(obj, {
+    user_id: 'userId',
+    replid: 'replId',
+    originReplid: 'originReplId',
+    Runtime: 'runtime'
+  });
+  replace(obj.runtime, {
+    Interactive: 'interactive',
+    Hosting: 'hosting',
+    Deployment: 'deployment',
+  });
+  return obj;
 }
 
 function replace(object, keys) {
-	for (const [oldKey, newKey] of Object.entries(keys)) {
-		if (oldKey in object) delete Object.assign(object, {[newKey]: object[oldKey]})[oldKey];
-	}
+  for (const [oldKey, newKey] of Object.entries(keys)) {
+    if (oldKey in object) 
+      delete Object.assign(object, {[newKey]: object[oldKey]})[oldKey];
+  }
 }
