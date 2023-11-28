@@ -71,7 +71,7 @@ const create = (audience) => identity('create', { audience });
  * @param {string} audience - The audience for which the token was created.
  * @returns {Info|null} - Returns null if there was token - audience identity mismatch.
  */
-const verify = (token, audience) => camelize(identity('verify', { audience, token, json: 'true' }));
+const verify = (token, audience) => camelize(identity('verify', { audience, token, json: true }));
 
 module.exports = { create, verify };
 
