@@ -77,22 +77,22 @@ module.exports = { create, verify };
 
 function camelize(obj) {
   if (obj === null) return null;
-  replace(obj, {
-    user_id: 'userId',
-    replid: 'replId',
-    originReplid: 'originReplId',
-    Runtime: 'runtime'
+  rename(obj, {
+    userId: 'user_id',
+    replId: 'replid',
+    originReplId: 'originReplid',
+    runtime: 'Runtime'
   });
-  replace(obj.runtime, {
-    Interactive: 'interactive',
-    Hosting: 'hosting',
-    Deployment: 'deployment',
+  rename(obj.runtime, {
+    interactive: 'Interactive',
+    hosting: 'Hosting',
+    deployment: 'Deployment',
   });
   return obj;
 }
 
-function replace(object, keys) {
-  for (const [oldKey, newKey] of Object.entries(keys)) {
+function rename(object, keys) {
+  for (const [newKey, oldKey] of Object.entries(keys)) {
     if (oldKey in object) 
       delete Object.assign(object, {[newKey]: object[oldKey]})[oldKey];
   }
