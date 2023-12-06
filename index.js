@@ -10,7 +10,7 @@ const { execSync } = require("child_process");
  * This is set if the Repl is running in a hosting subcluster.
  * @property {string} hosting.cluster - The cluster in which this Repl is running.
  * @property {string} hosting.subcluster - The subcluster in which this Repl is running.
- * @property {Object} [deployment]
+ * @property {boolean} [deployment]
  * This is set if the Repl is running in a Deployment.
  */
 
